@@ -13,3 +13,42 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                        String  @id @default(uuid()) @db.Uuid
+  name                      String  @db.VarChar()
+  email                     String  @unique @db.VarChar(128)
+  phone_number              String  @db.VarChar(64)
+  phone_number_country_code String  @db.VarChar(10)
+  tax_number                String? @unique @db.VarChar(32)
+
+  @@unique([phone_number_country_code, phone_number], name: "ux_user_phone_number_country_code_phone_number")
+  @@map("user")
+}
+
+model Customer {
+  id                        String  @id @default(uuid()) @db.Uuid
+  first_name                String  @db.VarChar(32)
+  last_name                 String  @db.VarChar(32)
+  email                     String? @unique @db.VarChar(128)
+  phone_number              String  @db.VarChar(64)
+  phone_number_country_code String  @db.VarChar(10)
+  address                   String  @db.VarChar()
+  zip_code                  String  @db.VarChar(32)
+  tax_number                String  @unique @db.VarChar(32)
+
+  @@unique([phone_number_country_code, phone_number], name: "ux_customer_phone_number_country_code_phone_number")
+  @@map("customer")
+}
+
+model Supplier {
+  id                        String  @id @default(uuid()) @db.Uuid
+  name                      String  @db.VarChar(32)
+  email                     String? @unique @db.VarChar(128)
+  phone_number              String  @db.VarChar(64)
+  phone_number_country_code String  @db.VarChar(10)
+  tax_number                String  @unique @db.VarChar(32)
+
+  @@unique([phone_number_country_code, phone_number], name: "ux_supplier_phone_number_country_code_phone_number")
+  @@map("supplier")
+}
